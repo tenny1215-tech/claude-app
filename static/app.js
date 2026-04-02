@@ -111,14 +111,6 @@ async function sendMessage() {
 
 sendBtn.addEventListener("click", sendMessage);
 
-inputEl.addEventListener("keydown", (e) => {
-  if (e.key !== "Enter" || e.shiftKey) return;
-  // 输入法组合中（如中文拼音选字）不按 Enter 发送，避免打断组词
-  if (e.isComposing) return;
-  e.preventDefault();
-  sendMessage();
-});
-
 inputEl.addEventListener("input", () => {
   autoResizeTextarea(inputEl);
 });
