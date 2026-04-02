@@ -10,6 +10,12 @@
     <div class="page">
       <header class="top">
         <div class="brand" id="brand">{{ app_name }}</div>
+        <div class="quota-bar" id="quotaBar" aria-label="今日使用额度">
+          <div class="quota-label" id="quotaLabel">今日剩余 100/100</div>
+          <div class="quota-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" id="quotaTrack">
+            <div class="quota-fill" id="quotaFill"></div>
+          </div>
+        </div>
       </header>
 
       <main class="chat-area">
@@ -18,13 +24,37 @@
 
       <section class="input-bar" aria-label="chat input">
         <div class="input-inner">
+          <input
+            type="file"
+            id="imageFile"
+            accept="image/jpeg,image/png,image/gif,image/webp"
+            hidden
+          />
           <div class="composer">
-            <textarea
-              id="chatInput"
-              rows="1"
-              placeholder="输入消息…"
-              autocomplete="off"
-            ></textarea>
+            <button type="button" id="imagePickBtn" class="icon-btn" aria-label="上传图片" title="上传图片">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M4 16l4.5-6 3.5 4.5 2.5-3L20 18M5 20h14a1 1 0 001-1V6a1 1 0 00-1-1H5a1 1 0 00-1 1v13a1 1 0 001 1z"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <circle cx="9" cy="9" r="1.5" fill="currentColor" />
+              </svg>
+            </button>
+            <div class="input-col">
+              <div id="imagePreviewWrap" class="image-preview-wrap hidden">
+                <img id="imagePreviewImg" alt="" />
+                <button type="button" id="imageRemoveBtn" class="image-remove" aria-label="移除图片">×</button>
+              </div>
+              <textarea
+                id="chatInput"
+                rows="1"
+                placeholder="输入消息…"
+                autocomplete="off"
+              ></textarea>
+            </div>
             <button id="sendBtn" type="button">发送</button>
           </div>
           <div class="disclaimer">小克可能会出错，请核实重要信息</div>
@@ -38,4 +68,3 @@
     <script src="{{ url_for('static', filename='app.js') }}"></script>
   </body>
 </html>
-
