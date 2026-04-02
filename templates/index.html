@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ app_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="top">
+        <div class="brand" id="brand">{{ app_name }}</div>
+      </header>
+
+      <main class="chat-area">
+        <div class="chat" id="chat" aria-live="polite"></div>
+      </main>
+
+      <section class="input-bar" aria-label="chat input">
+        <div class="input-inner">
+          <div class="composer">
+            <textarea
+              id="chatInput"
+              rows="1"
+              placeholder="输入消息…"
+              autocomplete="off"
+            ></textarea>
+            <button id="sendBtn" type="button">发送</button>
+          </div>
+          <div class="disclaimer">小克可能会出错，请核实重要信息</div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      window.APP_NAME = {{ app_name|tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>
+
