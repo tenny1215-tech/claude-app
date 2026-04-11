@@ -9,7 +9,7 @@ from flask import Flask, jsonify, render_template, request
 load_dotenv()
 
 APP_NAME = "小克"
-MODEL_NAME = "claude-haiku-4-5"
+MODEL_NAME = "claude-sonnet-4-5"
 SYSTEM_PROMPT = (
    "你是小克，一个由小腾腾专门为小玉玉打造的私人AI助手。"
     "小腾腾在巴黎，她做了这个小克送给在南京的小玉玉。"
