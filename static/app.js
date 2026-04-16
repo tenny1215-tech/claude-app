@@ -14,6 +14,36 @@ const QUOTA_STORAGE_KEY = "xiaoke_daily_quota";
 const QUOTA_DAILY_LIMIT = 100;
 const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
 
+// ========== 【改动1】聊天记录持久化 ==========
+const CHAT_STORAGE_KEY = "xiaoke_chat_history";
+
+function saveChatHistory(msgs) {
+  try {
+    // 只保存 role 和 content，不保存图片 base64（太大）和 thumbUrl（object URL 刷新后失效）
+    const toSave = msgs.map((m) => ({ role: m.role, content: m.content }));
+    localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(toSave));
+  } catch {
+    // 存储满了等情况静默忽略
+  }
+}
+
+function loadChatHistory() {
+  try {
+    const raw = localStorage.getItem(CHAT_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed) || parsed.length === 0) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function clearChatHistory() {
+  localStorage.removeItem(CHAT_STORAGE_KEY);
+}
+// ============================================
+
 function escapeToText(text) {
   return (text ?? "").toString();
 }
@@ -212,13 +242,10 @@ function renderChat(messages) {
   chatEl.scrollTop = chatEl.scrollHeight;
 }
 
-/** @type {{role:'assistant'|'user', content:string, thumbUrl?:string, image?:{mediaType:string,data:string}}[]} */
-let messages = [
-  {
-    role: "assistant",
-    content: "你好！我是小克，有什么可以帮你的？",
-  },
-];
+// ========== 【改动2】加载历史或使用默认开场白 ==========
+const DEFAULT_GREETING = [{ role: "assistant", content: "你好！我是小克，有什么可以帮你的？" }];
+let messages = loadChatHistory() || DEFAULT_GREETING;
+// ======================================================
 
 function toApiMessages(msgs) {
   return msgs.map((m) => {
@@ -320,6 +347,10 @@ async function sendMessage() {
     const assistantMsg = data?.assistant || { role: "assistant", content: "" };
     messages = messages.concat([assistantMsg]);
     renderChat(messages);
+
+    // ========== 【改动3】每次收到回复后保存历史 ==========
+    saveChatHistory(messages);
+    // ====================================================
   } catch (e) {
     messages = messages.concat([{ role: "assistant", content: `发生错误：${String(e)}` }]);
     renderChat(messages);
