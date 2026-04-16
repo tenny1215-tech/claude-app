@@ -367,3 +367,10 @@ sendBtn.addEventListener("click", sendMessage);
 inputEl.addEventListener("input", () => {
   autoResizeTextarea(inputEl);
 });
+document.getElementById("clearBtn").addEventListener("click", () => {
+  if (confirm("确定要开始新对话吗？之前的记录将被清除")) {
+    clearChatHistory();
+    messages = DEFAULT_GREETING;
+    renderChat(messages);
+  }
+});
